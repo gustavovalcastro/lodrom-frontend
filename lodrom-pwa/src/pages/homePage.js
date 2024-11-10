@@ -1,54 +1,102 @@
-// src/pages/HomePage.js
-import React, { useEffect, useState } from 'react';
+// src/pages/MenuPage.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function HomePage() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [fade, setFade] = useState(true);
+function MenuPage() {
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const navigate = useNavigate();
+  const username = "username"; // Substitua pelo nome real do usuário
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setFade(false); // Inicia o efeito de fade-out da tela de splash
-      setTimeout(() => setShowSplash(false), 500); // Aguarda o fade-out e troca a tela
-    }, 3000); // 3 segundos de splash screen
-    return () => clearTimeout(timer);
-  }, []);
+  const handleOverlayToggle = () => {
+    setIsOverlayOpen(!isOverlayOpen);
+  };
+
+  const handleNavigate = (path) => {
+    setIsOverlayOpen(false);
+    navigate(path);
+  };
 
   return (
-    <div className="flex items-center justify-center bg-gray-200 min-h-[calc(100vh-5rem)] font-sans">
-      <div className="bg-black rounded-[35px] p-4 w-full max-w-sm max-h-[50vh] min-h-[calc(92vh-4rem)] flex items-center justify-center">
-        <div className="bg-white w-full rounded-[30px] border border-gray-300 shadow-lg relative overflow-hidden flex flex-col h-full p-4">
-          {/* Notch do celular */}
-          <div className="absolute top-0 w-full h-3 bg-gray-300 rounded-b-lg"></div>
-
-          {/* Título com animação */}
-          <div
-            className={`transition-all duration-500 absolute left-0 right-0 flex justify-center ${fade ? 'top-1/2 transform -translate-y-1/2' : 'top-8 transform-none'
-              }`}
+    <div className="flex items-center justify-center bg-gray-100 min-h-screen font-sans relative min-h-[calc(100vh-4rem)]">
+      <div className="w-full max-w-md p-4 space-y-6">
+        
+        {/* Saudação e Botão de Menu Lateral */}
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={handleOverlayToggle}
+            className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
           >
-            <h1 className="text-2xl font-bold text-gray-800 tracking-widest">Lodrom</h1>
-          </div>
+            ☰ {/* Ícone de menu */}
+          </button>
+          <h1 className="text-2xl font-semibold text-gray-800">
+            Olá, <span className="font-bold">{username}</span>
+          </h1>
+        </div>
 
-          {/* Conteúdo principal */}
-          {!showSplash && (
-            <div className="flex flex-col justify-end h-full pt-24">
-              {/* Espaço flexível para manter os botões na parte inferior */}
-              <div className="flex-grow"></div>
-
-              {/* Botões com fade-in */}
-              <div className="flex flex-col items-center w-full space-y-3 mb-6">
-                <button className="w-full py-2 text-white bg-gray-800 rounded-lg font-semibold tracking-wider shadow-md">
-                  Entrar
-                </button>
-                <button className="w-full py-2 text-gray-800 bg-white border border-gray-800 rounded-lg font-semibold tracking-wider shadow-sm">
-                  Cadastrar
-                </button>
-              </div>
-            </div>
-          )}
+        {/* Opções principais */}
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <button
+            onClick={() => navigate('/control-portao')}
+            className="flex flex-col items-center justify-center p-4 bg-gray-200 rounded-lg text-gray-800 shadow-md"
+          >
+            <span role="img" aria-label="portao" className="text-2xl">🔒</span>
+            Controle do Portão
+          </button>
+          <button
+            onClick={() => navigate('/recados-cadastrados')}
+            className="flex flex-col items-center justify-center p-4 bg-gray-200 rounded-lg text-gray-800 shadow-md"
+          >
+            <span role="img" aria-label="recados" className="text-2xl">📋</span>
+            Recados Cadastrados
+          </button>
+          <button
+            onClick={() => navigate('/historico')}
+            className="flex flex-col items-center justify-center p-4 bg-gray-200 rounded-lg text-gray-800 shadow-md"
+          >
+            <span role="img" aria-label="historico" className="text-2xl">📜</span>
+            Acessar Histórico
+          </button>
+          <button
+            onClick={() => navigate('/cadastrar-recado')}
+            className="flex flex-col items-center justify-center p-4 bg-gray-200 rounded-lg text-gray-800 shadow-md"
+          >
+            <span role="img" aria-label="cadastrar" className="text-2xl">✏️</span>
+            Cadastrar Recado
+          </button>
         </div>
       </div>
+
+      {/* Overlay lateral responsivo */}
+      {isOverlayOpen && (
+        <div className="fixed top-0 left-0 h-full bg-white shadow-lg z-50 flex flex-col p-4 space-y-4 min-h-[calc(100vh-4rem)] w-3/4 sm:w-64 md:w-80 lg:w-96">
+          <button
+            onClick={handleOverlayToggle}
+            className="self-end text-gray-600 text-2xl"
+          >
+            ✕ {/* Ícone de fechar */}
+          </button>
+          <button
+            onClick={() => handleNavigate('/home')}
+            className="text-left text-gray-800 font-semibold text-lg"
+          >
+            Início
+          </button>
+          <button
+            onClick={() => handleNavigate('/configuracoes')}
+            className="text-left text-gray-800 font-semibold text-lg"
+          >
+            Configurações
+          </button>
+          <button
+            onClick={() => handleNavigate('/')}
+            className="text-left text-gray-800 font-semibold text-lg"
+          >
+            Sair
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
-export default HomePage;
+export default MenuPage;
