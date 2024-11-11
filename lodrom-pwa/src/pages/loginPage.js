@@ -6,7 +6,7 @@ function LoginPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 min-h-screen font-sans">
+    <div className="flex items-center justify-center bg-gray-100 min-h-[calc(100vh-4rem)] font-sans">
       <div className="w-full max-w-md p-8 flex flex-col items-center relative">
         
         {/* Botão de retorno à tela inicial */}

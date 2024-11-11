@@ -1,10 +1,24 @@
 // src/components/SidebarMenu.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function SidebarMenu({ isOpen, onClose }) {
   const [isSettingsDropdownOpen, setIsSettingsDropdownOpen] = useState(false);
+  const [animationClass, setAnimationClass] = useState(''); // Estado para controlar a animação
+  const [isVisible, setIsVisible] = useState(isOpen); // Estado para controlar a visibilidade
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+      setAnimationClass('animate-fade-in');
+    } else {
+      setAnimationClass('animate-fade-out');
+      // Aguarda o término da animação fade-out antes de ocultar o componente
+      const timeout = setTimeout(() => setIsVisible(false), 300); // 300ms é a duração da animação
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen]);
 
   const handleNavigate = (path) => {
     onClose();
@@ -17,8 +31,10 @@ function SidebarMenu({ isOpen, onClose }) {
   };
 
   return (
-    isOpen && (
-      <div className="fixed top-0 left-0 h-full bg-white shadow-lg z-50 flex flex-col p-4 space-y-4 min-h-screen w-3/4 sm:w-64 md:w-80 lg:w-96">
+    isVisible && (
+      <div
+        className={`fixed top-0 left-0 h-full bg-white shadow-lg z-50 flex flex-col p-4 space-y-4 min-h-[calc(100vh-4rem)] w-3/4 sm:w-64 md:w-80 lg:w-96 ${animationClass}`}
+      >
         <button onClick={onClose} className="self-end text-gray-600 text-2xl">
           ✕ {/* Ícone de fechar */}
         </button>

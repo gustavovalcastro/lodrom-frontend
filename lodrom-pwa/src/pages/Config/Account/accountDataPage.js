@@ -13,16 +13,16 @@ function AccountDataPage() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 font-sans min-h-screen">
+    <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
       <div className="w-full max-w-md p-4 space-y-4">
-        <button
+       
+        <h1 className="text-2xl font-semibold text-gray-800"> 
+          <button
             onClick={handleSidebarToggle}
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
-        >
+          >
             ☰ {/* Ícone de menu */}
-        </button>
-        <h1 className="text-2xl font-semibold text-gray-800">Dados da conta</h1>
-
+          </button>Dados da conta</h1>
         <input
           type="text"
           placeholder="Nome do usuário"

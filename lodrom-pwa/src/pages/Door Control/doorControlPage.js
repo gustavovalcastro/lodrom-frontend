@@ -18,15 +18,18 @@ function DoorControlPage() {
     setIsSidebarOpen(!isSidebarOpen);
   };
   return (
-    <div className="flex items-center justify-center bg-gray-100 font-sans min-h-screen">
+    <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
       <div className="w-full max-w-md p-4 space-y-4">
-        <button
+        
+        <h1 className="text-2xl font-semibold text-gray-800">
+          <button
             onClick={handleSidebarToggle}
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
-        >
-            ☰ {/* Ícone de menu */}
-        </button>
-        <h1 className="text-2xl font-semibold text-gray-800">Controle de portão</h1>
+          >
+              ☰ {/* Ícone de menu */}
+          </button>
+          Controle de portão
+        </h1>
         
         <button
           onClick={() => navigate('/inserir-pin')}

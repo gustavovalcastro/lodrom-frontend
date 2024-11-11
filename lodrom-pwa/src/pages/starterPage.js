@@ -14,7 +14,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 min-h-screen font-sans min-h-[calc(100vh-4rem)]">
+    <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
       <div className="w-full max-w-md p-8 flex flex-col items-center ">
         {/* Título com efeito de arrastar para cima sem desaparecer */}
         <h1
