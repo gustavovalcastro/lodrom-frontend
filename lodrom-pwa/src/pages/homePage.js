@@ -1,29 +1,24 @@
 // src/pages/MenuPage.js
 import React, { useState } from 'react';
+import SidebarMenu from '../components/sideBarMenu';
 import { useNavigate } from 'react-router-dom';
 
 function MenuPage() {
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const username = "username"; // Substitua pelo nome real do usuário
+  const navigate = useNavigate();
 
-  const handleOverlayToggle = () => {
-    setIsOverlayOpen(!isOverlayOpen);
-  };
-
-  const handleNavigate = (path) => {
-    setIsOverlayOpen(false);
-    navigate(path);
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 min-h-screen font-sans relative min-h-[calc(100vh-4rem)]">
+    <div className="flex items-center justify-center bg-gray-100 font-sans relative min-h-screen">
       <div className="w-full max-w-md p-4 space-y-6">
-        
         {/* Saudação e Botão de Menu Lateral */}
         <div className="flex items-center space-x-2">
           <button
-            onClick={handleOverlayToggle}
+            onClick={handleSidebarToggle}
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
           >
             ☰ {/* Ícone de menu */}
@@ -36,7 +31,7 @@ function MenuPage() {
         {/* Opções principais */}
         <div className="grid grid-cols-2 gap-4 mt-4">
           <button
-            onClick={() => navigate('/control-portao')}
+            onClick={() => navigate('/controle-portao')}
             className="flex flex-col items-center justify-center p-4 bg-gray-200 rounded-lg text-gray-800 shadow-md"
           >
             <span role="img" aria-label="portao" className="text-2xl">🔒</span>
@@ -66,35 +61,8 @@ function MenuPage() {
         </div>
       </div>
 
-      {/* Overlay lateral responsivo */}
-      {isOverlayOpen && (
-        <div className="fixed top-0 left-0 h-full bg-white shadow-lg z-50 flex flex-col p-4 space-y-4 min-h-[calc(100vh-4rem)] w-3/4 sm:w-64 md:w-80 lg:w-96">
-          <button
-            onClick={handleOverlayToggle}
-            className="self-end text-gray-600 text-2xl"
-          >
-            ✕ {/* Ícone de fechar */}
-          </button>
-          <button
-            onClick={() => handleNavigate('/home')}
-            className="text-left text-gray-800 font-semibold text-lg"
-          >
-            Início
-          </button>
-          <button
-            onClick={() => handleNavigate('/configuracoes')}
-            className="text-left text-gray-800 font-semibold text-lg"
-          >
-            Configurações
-          </button>
-          <button
-            onClick={() => handleNavigate('/')}
-            className="text-left text-gray-800 font-semibold text-lg"
-          >
-            Sair
-          </button>
-        </div>
-      )}
+      {/* Menu Lateral */}
+      <SidebarMenu isOpen={isSidebarOpen} onClose={handleSidebarToggle} />
     </div>
   );
 }

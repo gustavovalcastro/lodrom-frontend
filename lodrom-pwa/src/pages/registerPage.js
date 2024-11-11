@@ -1,19 +1,23 @@
 // src/pages/RegisterPage.js
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import SidebarMenu from '../components/sideBarMenu';
 
 function RegisterPage() {
-  const navigate = useNavigate();
-  return (
-    <div className="flex items-center justify-center bg-gray-100 min-h-screen font-sans min-h-[calc(100vh-4rem)]">
-      <div className="w-full max-w-md p-8 space-y-8">
-        {/* Botão de Voltar */}
-        <button
-          onClick={() => navigate('/login')}
-        >
-          ←
-        </button>
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  return (
+    <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
+      <div className="w-full max-w-md p-8 space-y-8">
+        <button
+            onClick={handleSidebarToggle}
+            className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
+        >
+            ☰ {/* Ícone de menu */}
+        </button>
         {/* Título */}
         <h1 className="text-center text-xl font-semibold text-gray-900 mb-8">
           Preencha os campos para realizar o cadastro no Lodrom!
@@ -53,6 +57,7 @@ function RegisterPage() {
           Cadastrar
         </button>
       </div>
+      <SidebarMenu isOpen={isSidebarOpen} onClose={handleSidebarToggle} />
     </div>
   );
 }

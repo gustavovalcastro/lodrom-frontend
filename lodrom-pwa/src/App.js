@@ -9,6 +9,16 @@ import LoginPage from './pages/loginPage';
 import ForgotPasswordPage from './pages/forgotPasswordPage';
 import RegisterPage from './pages/registerPage';
 import HomePage from './pages/homePage';
+import HistoryPage from './pages/historyPage';
+import NotesPage from './pages/Notes/notesPage';
+import CreateNotePage from './pages/Notes/createNotePage';
+import EditNotePage from './pages/Notes/editNotePages';
+import DoorControlPage from './pages/Door Control/doorControlPage';
+import CreatePINPage from './pages/Config/Pin Control/createPinPage';
+import EditPINPage from './pages/Config/Pin Control/editPinPage';
+import InsertPINPage from './pages/Door Control/insertPinPage';
+import AccountDataPage from './pages/Config/Account/accountDataPage';
+import PasswordRestorePage from './pages/Config/Account/passwordRestorePage'
 
 function App() {
   return (
@@ -23,6 +33,17 @@ function App() {
             <Route path="/forgotPassword" element={<ForgotPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/home" element={<HomePage />} />
+            <Route path="/historico" element={<HistoryPage />} />
+            <Route path="/recados-cadastrados" element={<NotesPage />} />
+            <Route path="/cadastrar-recado" element={<CreateNotePage />} />
+            <Route path="/editar-recado/:id" element={<EditNotePage />} />
+            <Route path="/controle-portao" element={<DoorControlPage />} />
+            <Route path="/criar-pin" element={<CreatePINPage />} />
+            <Route path="/editar-pin" element={<EditPINPage />} />
+            <Route path="/inserir-pin" element={<InsertPINPage />} />
+            <Route path="/dados-conta" element={<AccountDataPage />} />
+            <Route path="/redefinir-senha" element={<PasswordRestorePage />} />
+
             {/* Outras rotas */}
           </Routes>
         </main>
