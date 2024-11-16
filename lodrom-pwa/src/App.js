@@ -14,8 +14,8 @@ import NotesPage from './pages/Notes/notesPage';
 import CreateNotePage from './pages/Notes/createNotePage';
 import EditNotePage from './pages/Notes/editNotePages';
 import DoorControlPage from './pages/Door Control/doorControlPage';
-import CreatePINPage from './pages/Config/Pin Control/createPinPage';
-import EditPINPage from './pages/Config/Pin Control/editPinPage';
+import CreatePINPage from './pages/Door Control/createPinPage';
+import EditPINPage from './pages/Door Control/editPinPage';
 import InsertPINPage from './pages/Door Control/insertPinPage';
 import AccountDataPage from './pages/Config/Account/accountDataPage';
 import PasswordRestorePage from './pages/Config/Account/passwordRestorePage'

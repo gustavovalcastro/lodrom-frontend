@@ -1,4 +1,3 @@
-// src/components/SidebarMenu.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,7 +13,6 @@ function SidebarMenu({ isOpen, onClose }) {
       setAnimationClass('animate-fade-in');
     } else {
       setAnimationClass('animate-fade-out');
-      // Aguarda o término da animação fade-out antes de ocultar o componente
       const timeout = setTimeout(() => setIsVisible(false), 300); // 300ms é a duração da animação
       return () => clearTimeout(timeout);
     }
@@ -24,6 +22,17 @@ function SidebarMenu({ isOpen, onClose }) {
     onClose();
     setIsSettingsDropdownOpen(false);
     navigate(path);
+  };
+
+  const handleLogout = () => {
+    // Limpa os campos "refresh", "access" e "username" do localStorage
+    localStorage.removeItem('refresh');
+    localStorage.removeItem('access');
+    localStorage.removeItem('username');
+
+    // Fecha o menu e redireciona para a página inicial
+    onClose();
+    navigate('/');
   };
 
   const handleSettingsDropdownToggle = () => {
@@ -83,7 +92,8 @@ function SidebarMenu({ isOpen, onClose }) {
           Cadastrar Recado
         </button>
 
-        <button onClick={() => handleNavigate('/')} className="text-left text-red-500 font-semibold text-lg">
+        {/* Botão "Sair" que limpa o localStorage */}
+        <button onClick={handleLogout} className="text-left text-red-500 font-semibold text-lg">
           Sair
         </button>
       </div>

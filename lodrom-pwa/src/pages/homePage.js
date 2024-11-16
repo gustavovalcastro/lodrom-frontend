@@ -1,12 +1,19 @@
-// src/pages/MenuPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SidebarMenu from '../components/sideBarMenu';
 import { useNavigate } from 'react-router-dom';
 
 function MenuPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const username = "username"; // Substitua pelo nome real do usuário
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Recupera o username do localStorage
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -18,12 +25,13 @@ function MenuPage() {
         {/* Saudação e Botão de Menu Lateral */}
         <div className="flex items-center space-x-2">
           <h1 className="text-2xl font-semibold text-gray-800">
-          <button
-            onClick={handleSidebarToggle}
-            className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
-          >
-            ☰ {/* Ícone de menu */}
-          </button>Olá, <span className="font-bold">{username}</span>
+            <button
+              onClick={handleSidebarToggle}
+              className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
+            >
+              ☰ {/* Ícone de menu */}
+            </button>
+            Olá, <span className="font-bold">{username}</span>
           </h1>
         </div>
 

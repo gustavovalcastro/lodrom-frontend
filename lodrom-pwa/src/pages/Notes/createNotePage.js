@@ -5,27 +5,70 @@ import SidebarMenu from '../../components/sideBarMenu';
 
 function CreateNotePage() {
   const navigate = useNavigate();
-  const [mensagem, setMensagem] = useState('');
-  const [inicio, setInicio] = useState('');
-  const [fim, setFim] = useState('');
-  const [diasSemana, setDiasSemana] = useState([]);
+  const [message, setMessage] = useState('');
+  const [start_time, setStart_time] = useState('');
+  const [end_time, setEnd_time] = useState('');
+  const [days_week, setDays_week] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const dayMapping = {
+    dom: 'sun',
+    seg: 'mon',
+    ter: 'tue',
+    qua: 'wed',
+    qui: 'thu',
+    sex: 'fri',
+    sáb: 'sat',
+  };
 
   const handleDiaSemanaToggle = (dia) => {
-    setDiasSemana((prev) =>
+    setDays_week((prev) =>
       prev.includes(dia) ? prev.filter((d) => d !== dia) : [...prev, dia]
     );
   };
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleCreateNote = async () => {
+    const accessToken = localStorage.getItem('access');
+    const mappedDays = days_week.map((dia) => dayMapping[dia]);
+    const recado = {
+      message,
+      start_time,
+      end_time,
+      days_week: mappedDays,
+    };
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/recados/create/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(recado),
+      });
+
+      if (response.ok) {
+        // Navegar para a página de recados cadastrados após o sucesso
+        navigate('/recados-cadastrados');
+      } else {
+        // Tratar erro na criação
+        const errorData = await response.json();
+        console.error('Erro ao criar recado:', errorData);
+        alert('Erro ao criar o recado: ' + (errorData.message || 'Erro desconhecido.'));
+      }
+    } catch (error) {
+      console.error('Erro ao enviar a requisição:', error);
+      alert('Erro ao se comunicar com o servidor.');
+    }
+  };
+
   return (
     <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
       <div className="w-full max-w-md p-4 space-y-4">
-        
         <h1 className="text-2xl font-semibold text-gray-800">
           <button
             onClick={handleSidebarToggle}
@@ -37,23 +80,23 @@ function CreateNotePage() {
         </h1>
         <input
           type="text"
-          placeholder="Mensagem *"
-          value={mensagem}
-          onChange={(e) => setMensagem(e.target.value)}
+          placeholder="message *"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           className="p-2 w-full border rounded-md"
         />
         <input
           type="time"
           placeholder="Horário de início"
-          value={inicio}
-          onChange={(e) => setInicio(e.target.value)}
+          value={start_time}
+          onChange={(e) => setStart_time(e.target.value)}
           className="p-2 w-full border rounded-md"
         />
         <input
           type="time"
           placeholder="Horário de fim"
-          value={fim}
-          onChange={(e) => setFim(e.target.value)}
+          value={end_time}
+          onChange={(e) => setEnd_time(e.target.value)}
           className="p-2 w-full border rounded-md"
         />
         <div className="flex space-x-2">
@@ -61,14 +104,14 @@ function CreateNotePage() {
             <button
               key={dia}
               onClick={() => handleDiaSemanaToggle(dia)}
-              className={`p-2 rounded-lg ${diasSemana.includes(dia) ? 'bg-gray-300' : 'bg-gray-200'}`}
+              className={`p-2 rounded-lg ${days_week.includes(dia) ? 'bg-gray-300' : 'bg-gray-200'}`}
             >
               {dia}
             </button>
           ))}
         </div>
         <button
-          onClick={() => navigate('/recados-cadastrados')}
+          onClick={handleCreateNote}
           className="w-full p-3 bg-gray-700 text-white rounded-lg"
         >
           Salvar

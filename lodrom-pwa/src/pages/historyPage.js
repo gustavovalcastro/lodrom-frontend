@@ -1,80 +1,82 @@
-// src/pages/HistoryPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SidebarMenu from '../components/sideBarMenu';
 
-const historicoData = [
-  {
-    data: '30-11-2024',
-    eventos: [
-      { hora: '23:59:00', descricao: 'Portão destravado por hernane' },
-      { hora: '20:50:00', descricao: 'Portão destravado pelo gancho' },
-      { hora: '20:49:58', descricao: 'Interfone foi atendido' },
-      { hora: '20:49:00', descricao: 'Interfone tocou' },
-    ],
-  },
-  {
-    data: '29-11-2024',
-    eventos: [
-      { hora: '23:59:00', descricao: 'Portão destravado pelo gancho' },
-      { hora: '20:50:00', descricao: 'Portão destravado por matheus' },
-      { hora: '19:50:10', descricao: 'Recados foram anunciados' },
-      { hora: '19:49:00', descricao: 'Interfone tocou' },
-    ],
-  },
-  {
-    data: '28-11-2024',
-    eventos: [
-      { hora: '23:59:00', descricao: 'Portão destravado por Pedro' },
-    ],
-  },
-  {
-    data: '27-11-2024',
-    eventos: [
-      { hora: '23:59:00', descricao: 'Portão destravado por Gustavo' },
-      { hora: '19:50:10', descricao: 'Recados foram anunciados' },
-      { hora: '19:49:00', descricao: 'Interfone tocou' },
-    ],
-  },
-  {
-    data: '26-11-2024',
-    eventos: [
-      { hora: '23:59:00', descricao: 'Portão destravado por João' },
-      { hora: '23:59:00', descricao: 'Portão destravado por Gustavo' },
-      { hora: '19:50:10', descricao: 'Recados foram anunciados' },
-      { hora: '19:49:00', descricao: 'Interfone tocou' },
-    ],
-  },
-  {
-    data: '26-11-2024',
-    eventos: [
-      { hora: '23:59:00', descricao: 'Portão destravado por Hernane' },
-      { hora: '23:59:00', descricao: 'Portão destravado por Pedro' },
-      { hora: '19:50:10', descricao: 'Recados foram anunciados' },
-      { hora: '19:49:00', descricao: 'Interfone tocou' },
-    ],
-  },
-  {
-    data: '26-11-2024',
-    eventos: [
-      { hora: '23:59:00', descricao: 'Portão destravado por João' },
-      { hora: '23:59:00', descricao: 'Portão destravado por Gustavo' },
-      { hora: '19:50:10', descricao: 'Recados foram anunciados' },
-      { hora: '19:49:00', descricao: 'Interfone tocou' },
-    ],
-  },
-  {
-    data: '28-11-2024',
-    eventos: [
-      { hora: '23:59:00', descricao: 'Portão destravado por hernane' },
-    ],
-  },
-];
 function HistoryPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [historicoData, setHistoricoData] = useState([]); // Estado para armazenar os dados do histórico
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const fetchHistorico = async () => {
+    const accessToken = localStorage.getItem('access');
+    if (!accessToken) {
+      alert('Usuário não autenticado. Faça login novamente.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/historico/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        console.log("Dados originais da API:", data); // Log para verificar os dados da API
+
+        // Agrupa os eventos por data
+        const groupedData = data.reduce((acc, evento) => {
+          // Extrai e converte a data e a hora
+          const eventDate = new Date(evento.event_time);
+          const date = eventDate.toLocaleDateString('pt-BR'); // Data no formato DD/MM/YYYY
+          const time = eventDate.toLocaleTimeString('pt-BR'); // Hora no formato HH:mm:ss
+
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+
+          // Adiciona descrição extra para eventos do tipo 2
+          const descricaoExtra = evento.event_type === "2" && evento.account_username
+            ? `${evento.event_description} por ${evento.account_username}`
+            : evento.event_description;
+
+          acc[date].push({
+            hora: time,
+            descricao: descricaoExtra,
+          });
+          return acc;
+        }, {});
+
+        console.log("Dados agrupados por data:", groupedData); // Log para verificar o agrupamento
+
+        // Converte o agrupamento em um array e ordena os dias e eventos
+        const sortedData = Object.entries(groupedData)
+          .sort((a, b) => new Date(b[0].split('/').reverse().join('-')) - new Date(a[0].split('/').reverse().join('-'))) // Ordena os dias em ordem decrescente
+          .map(([data, eventos]) => ({
+            data, // Já está no formato DD/MM/YYYY
+            eventos: eventos.sort((a, b) => b.hora.localeCompare(a.hora)), // Ordena os eventos por hora decrescente
+          }));
+
+        console.log("Dados ordenados e formatados:", sortedData); // Log para verificar os dados finais
+
+        setHistoricoData(sortedData);
+      } else {
+        console.error('Erro ao buscar histórico:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Erro de conexão ao buscar histórico:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchHistorico(); // Busca o histórico ao carregar a página
+  }, []);
+
   return (
     <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)] overflow-hidden">
       <div className="w-full max-w-md p-4">
@@ -90,19 +92,23 @@ function HistoryPage() {
 
         {/* Container rolável para o conteúdo */}
         <div className="max-h-[calc(100vh-8rem)] overflow-y-auto space-y-4 mt-4">
-          {historicoData.map((dia, index) => (
-            <div key={index} className="space-y-2">
-              <h2 className="text-lg font-semibold text-gray-700">{dia.data}</h2>
-              <div className="space-y-1">
-                {dia.eventos.map((evento, i) => (
-                  <div key={i} className="p-2 bg-gray-200 rounded-md shadow-sm">
-                    <span className="font-mono text-sm text-gray-600">{evento.hora}</span>
-                    <p className="text-gray-800">{evento.descricao}</p>
-                  </div>
-                ))}
+          {historicoData.length > 0 ? (
+            historicoData.map((dia, index) => (
+              <div key={index} className="space-y-2">
+                <h2 className="text-lg font-semibold text-gray-700">{dia.data}</h2>
+                <div className="space-y-1">
+                  {dia.eventos.map((evento, i) => (
+                    <div key={i} className="p-2 bg-gray-200 rounded-md shadow-sm">
+                      <span className="font-mono text-sm text-gray-600">{evento.hora}</span>
+                      <p className="text-gray-800">{evento.descricao}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-gray-500 text-center">Nenhum histórico disponível.</p>
+          )}
         </div>
       </div>
       <SidebarMenu isOpen={isSidebarOpen} onClose={handleSidebarToggle} />

@@ -2,50 +2,60 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarMenu from '../../components/sideBarMenu';
 
-function InsertPINPage() {
-  const navigate = useNavigate();
+function EditPINPage() {
   const [pin, setPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleOpenGate = async () => {
+  const handleResetPin = async () => {
     setErrorMessage('');
     setSuccessMessage('');
 
+    if (pin !== confirmPin) {
+      setErrorMessage('Os PINs não coincidem. Tente novamente.');
+      return;
+    }
+
+    if (pin.length !== 4 || isNaN(pin)) {
+      setErrorMessage('O PIN deve ser um número de 4 dígitos.');
+      return;
+    }
+
     const accessToken = localStorage.getItem('access');
     if (!accessToken) {
-      alert('Usuário não autenticado. Faça login novamente.');
+      setErrorMessage('Usuário não autenticado. Faça login novamente.');
       navigate('/login');
       return;
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/controle_portao/open/', {
-        method: 'POST',
+      const response = await fetch('http://127.0.0.1:8000/config/controle_portao/reset_pin/', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho
         },
-        body: JSON.stringify({ pin }), // Enviando o PIN no corpo da requisição
+        body: JSON.stringify({ pin1: pin, pin2: confirmPin }), // Enviando os PINs no formato correto
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setSuccessMessage('Portão aberto com sucesso!');
+        setSuccessMessage('PIN redefinido com sucesso!');
         setTimeout(() => {
-          navigate('/controle-portao'); // Redireciona para a página de controle do portão
+          navigate('/controle-portao'); // Redireciona para a página de controle do portão após sucesso
         }, 2000); // Aguarda 2 segundos antes de redirecionar
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || 'PIN incorreto. Tente novamente.');
+        setErrorMessage(errorData.message || 'Erro ao redefinir o PIN. Tente novamente.');
       }
     } catch (error) {
-      console.error('Erro ao abrir o portão:', error);
+      console.error('Erro ao redefinir o PIN:', error);
       setErrorMessage('Erro de conexão. Tente novamente.');
     }
   };
@@ -59,8 +69,9 @@ function InsertPINPage() {
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
           >
             ☰ {/* Ícone de menu */}
-          </button>Inserir PIN
+          </button>Editar PIN
         </h1>
+        <p className="text-gray-600">Insira novo PIN numérico de 4 dígitos</p>
 
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         {successMessage && <p className="text-green-500">{successMessage}</p>}
@@ -73,12 +84,20 @@ function InsertPINPage() {
           onChange={(e) => setPin(e.target.value)}
           className="p-2 w-full border rounded-md"
         />
+        <input
+          type="password"
+          maxLength="4"
+          placeholder="Confirmar PIN"
+          value={confirmPin}
+          onChange={(e) => setConfirmPin(e.target.value)}
+          className="p-2 w-full border rounded-md"
+        />
 
         <button
-          onClick={handleOpenGate}
-          className="w-full p-3 bg-gray-700 text-white rounded-lg flex justify-center items-center"
+          onClick={handleResetPin}
+          className="w-full p-3 bg-gray-700 text-white rounded-lg"
         >
-          🔓 Abrir Portão
+          Salvar
         </button>
       </div>
       <SidebarMenu isOpen={isSidebarOpen} onClose={handleSidebarToggle} />
@@ -86,4 +105,4 @@ function InsertPINPage() {
   );
 }
 
-export default InsertPINPage;
+export default EditPINPage;
