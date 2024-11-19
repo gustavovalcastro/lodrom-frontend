@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import SidebarMenu from '../components/sideBarMenu';
+import { useNavigate } from 'react-router-dom';
 
 function HistoryPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [historicoData, setHistoricoData] = useState([]); // Estado para armazenar os dados do histórico
+  const navigate = useNavigate();
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -17,7 +19,7 @@ function HistoryPage() {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/historico/', {
+      const response = await fetch('http://localhost:8000/historico/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho
@@ -79,15 +81,25 @@ function HistoryPage() {
 
   return (
     <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)] overflow-hidden">
-      <div className="w-full max-w-md p-4">
+      <div className="w-full max-w-md p-4 space-y-4">
         
-        <h1 className="text-2xl font-semibold text-gray-800">
+        <div className="flex justify-between w-full">
+          <button
+            onClick={() => navigate('/home')}
+            className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
+          >
+           ⌂ {/* Ícone de voltar */}
+          </button>
           <button
             onClick={handleSidebarToggle}
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
           >
             ☰ {/* Ícone de menu */}
-          </button>Histórico
+          </button>
+        </div>
+
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Histórico
         </h1>
 
         {/* Container rolável para o conteúdo */}

@@ -1,9 +1,11 @@
 // src/pages/ForgotPasswordPage.js
 import React, { useState } from 'react';
 import SidebarMenu from '../components/sideBarMenu';
+import { useNavigate } from 'react-router-dom';
 
 function ForgotPasswordPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -11,11 +13,12 @@ function ForgotPasswordPage() {
   return (
     <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
       <div className="w-full max-w-md p-8 space-y-8">
+        {/* Botão de retorno à tela inicial */}
         <button
-            onClick={handleSidebarToggle}
-            className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
+          onClick={() => navigate('/login')}
+          className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
         >
-            ☰ {/* Ícone de menu */}
+          ←
         </button>
 
         {/* Título */}
