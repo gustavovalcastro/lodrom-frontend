@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 function RegisterPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [formData, setFormData] = useState({
-    nome: '',
     email: '',
     username: '',
+    device_code: '',
     password: '',
     password2: '',
     phone_number: '',
@@ -40,7 +40,7 @@ function RegisterPage() {
           password: formData.password,
           password2: formData.password2,
           phone_number: formData.phone_number,
-          device_code: 'ALVORADA', // Substitua conforme necessário
+          device_code: formData.device_code, // Substitua conforme necessário
         }),
       });
 
@@ -67,12 +67,14 @@ function RegisterPage() {
   return (
     <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
       <div className="w-full max-w-md p-8 space-y-8">
+        {/* Botão de retorno à tela inicial */}
         <button
-          onClick={handleSidebarToggle}
+          onClick={() => navigate('/login')}
           className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
         >
-          ☰ {/* Ícone de menu */}
+          ←
         </button>
+
         <h1 className="text-center text-xl font-semibold text-gray-900 mb-8">
           Preencha os campos para realizar o cadastro no Lodrom!
         </h1>
@@ -86,10 +88,10 @@ function RegisterPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            name="nome"
-            value={formData.nome}
+            name="username"
+            value={formData.username}
             onChange={handleInputChange}
-            placeholder="Nome"
+            placeholder="Usuário"
             className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:border-gray-400"
           />
           <input
@@ -102,10 +104,10 @@ function RegisterPage() {
           />
           <input
             type="text"
-            name="username"
-            value={formData.username}
+            name="device_code"
+            value={formData.device_code}
             onChange={handleInputChange}
-            placeholder="Usuário"
+            placeholder="Código do Dispositivo"
             className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:border-gray-400"
           />
           <InputMask

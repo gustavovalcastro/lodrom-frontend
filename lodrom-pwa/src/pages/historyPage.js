@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import SidebarMenu from '../components/sideBarMenu';
+import { useNavigate } from 'react-router-dom';
 
 function HistoryPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [historicoData, setHistoricoData] = useState([]); // Estado para armazenar os dados do histórico
+  const navigate = useNavigate();
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -87,7 +89,11 @@ function HistoryPage() {
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
           >
             ☰ {/* Ícone de menu */}
-          </button>Histórico
+          </button>
+        </div>
+
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Histórico
         </h1>
 
         {/* Container rolável para o conteúdo */}

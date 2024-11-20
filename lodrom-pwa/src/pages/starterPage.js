@@ -9,7 +9,7 @@ function HomePage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false); // Finaliza a tela de splash e exibe o conteúdo principal
-    }, 3000); // Splash screen de 3 segundos
+    }, 1500); // Splash screen de 3 segundos
     return () => clearTimeout(timer);
   }, []);
 

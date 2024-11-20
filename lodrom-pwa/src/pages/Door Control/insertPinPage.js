@@ -53,13 +53,24 @@ function InsertPINPage() {
   return (
     <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
       <div className="w-full max-w-md p-4 space-y-4">
-        <h1 className="text-2xl font-semibold text-gray-800">
+
+        <div className="flex justify-between w-full">
+          <button
+            onClick={() => navigate('/home')}
+            className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
+          >
+           ⌂ {/* Ícone de voltar */}
+          </button>
           <button
             onClick={handleSidebarToggle}
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
           >
             ☰ {/* Ícone de menu */}
-          </button>Inserir PIN
+          </button>
+        </div>
+
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Inserir PIN
         </h1>
 
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
