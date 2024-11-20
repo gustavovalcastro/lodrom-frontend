@@ -9,6 +9,8 @@ function CreatePINPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [showPin, setShowPin] = useState(false); // Estado para visibilidade do PIN
+  const [showConfirmPin, setShowConfirmPin] = useState(false); // Estado para visibilidade do PIN de confirmação
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -87,22 +89,41 @@ function CreatePINPage() {
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         {successMessage && <p className="text-green-500">{successMessage}</p>}
 
-        <input
-          type="password"
-          maxLength="4"
-          placeholder="PIN"
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
-          className="p-2 w-full border rounded-md"
-        />
-        <input
-          type="password"
-          maxLength="4"
-          placeholder="Confirmar PIN"
-          value={confirmPin}
-          onChange={(e) => setConfirmPin(e.target.value)}
-          className="p-2 w-full border rounded-md"
-        />
+        {/* Campo PIN */}
+        <div className="relative">
+          <input
+            type={showPin ? 'text' : 'password'}
+            maxLength="4"
+            placeholder="PIN"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            className="p-2 w-full border rounded-md"
+          />
+          <span
+            className="absolute right-3 top-2.5 text-gray-600 cursor-pointer"
+            onClick={() => setShowPin(!showPin)}
+          >
+            {showPin ? '🙈' : '👁️'}
+          </span>
+        </div>
+
+        {/* Campo Confirmar PIN */}
+        <div className="relative">
+          <input
+            type={showConfirmPin ? 'text' : 'password'}
+            maxLength="4"
+            placeholder="Confirmar PIN"
+            value={confirmPin}
+            onChange={(e) => setConfirmPin(e.target.value)}
+            className="p-2 w-full border rounded-md"
+          />
+          <span
+            className="absolute right-3 top-2.5 text-gray-600 cursor-pointer"
+            onClick={() => setShowConfirmPin(!showConfirmPin)}
+          >
+            {showConfirmPin ? '🙈' : '👁️'}
+          </span>
+        </div>
 
         <button
           onClick={handleSavePin}

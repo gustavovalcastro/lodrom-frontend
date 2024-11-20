@@ -6,6 +6,7 @@ function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Estado para visibilidade da senha
 
   const handleLogin = async () => {
     setErrorMessage('');
@@ -79,14 +80,17 @@ function LoginPage() {
           />
           <div className="relative">
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:border-gray-400"
             />
-            <span className="absolute right-4 top-3 text-gray-500 cursor-pointer">
-              👁️ {/* Ícone para visibilidade de senha */}
+            <span
+              className="absolute right-4 top-3 text-gray-500 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? '🙈' : '👁️'}
             </span>
           </div>
 

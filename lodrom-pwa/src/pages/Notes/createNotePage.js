@@ -1,4 +1,3 @@
-// src/pages/CreateNotePage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarMenu from '../../components/sideBarMenu';
@@ -34,11 +33,13 @@ function CreateNotePage() {
   const handleCreateNote = async () => {
     const accessToken = localStorage.getItem('access');
     const mappedDays = days_week.map((dia) => dayMapping[dia]);
+
+    // Montar o objeto do recado, adicionando campos opcionais somente se não estiverem vazios
     const recado = {
       message,
-      start_time,
-      end_time,
       days_week: mappedDays,
+      ...(start_time && { start_time }), // Inclui start_time se estiver preenchido
+      ...(end_time && { end_time }),    // Inclui end_time se estiver preenchido
     };
 
     try {
@@ -52,10 +53,8 @@ function CreateNotePage() {
       });
 
       if (response.ok) {
-        // Navegar para a página de recados cadastrados após o sucesso
-        navigate('/recados-cadastrados');
+        navigate('/recados-cadastrados'); // Navegar para a página de recados cadastrados após o sucesso
       } else {
-        // Tratar erro na criação
         const errorData = await response.json();
         console.error('Erro ao criar recado:', errorData);
         alert('Erro ao criar o recado: ' + (errorData.message || 'Erro desconhecido.'));
@@ -69,13 +68,12 @@ function CreateNotePage() {
   return (
     <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)]">
       <div className="w-full max-w-md p-4 space-y-4">
-
         <div className="flex justify-between w-full">
           <button
-            onClick={() => navigate('/home')}
+            onClick={() => navigate('/recados-cadastrados')}
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
           >
-           ⌂ {/* Ícone de voltar */}
+            ⌂ {/* Ícone de voltar */}
           </button>
           <button
             onClick={handleSidebarToggle}

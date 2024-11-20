@@ -8,6 +8,8 @@ function EditPINPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [showPin, setShowPin] = useState(false); // Estado para visibilidade do PIN
+  const [showConfirmPin, setShowConfirmPin] = useState(false); // Estado para visibilidade do PIN de confirmação
   const navigate = useNavigate();
 
   const handleSidebarToggle = () => {
@@ -40,16 +42,16 @@ function EditPINPage() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho
+          Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ pin1: pin, pin2: confirmPin }), // Enviando os PINs no formato correto
+        body: JSON.stringify({ pin1: pin, pin2: confirmPin }),
       });
 
       if (response.ok) {
         setSuccessMessage('PIN redefinido com sucesso!');
         setTimeout(() => {
-          navigate('/controle-portao'); // Redireciona para a página de controle do portão após sucesso
-        }, 2000); // Aguarda 2 segundos antes de redirecionar
+          navigate('/controle-portao');
+        }, 2000);
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || 'Erro ao redefinir o PIN. Tente novamente.');
@@ -69,7 +71,7 @@ function EditPINPage() {
             onClick={() => navigate('/home')}
             className="text-gray-600 text-xl p-2 rounded-full hover:bg-gray-200"
           >
-           ⌂ {/* Ícone de voltar */}
+            ⌂ {/* Ícone de voltar */}
           </button>
           <button
             onClick={handleSidebarToggle}
@@ -87,22 +89,41 @@ function EditPINPage() {
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         {successMessage && <p className="text-green-500">{successMessage}</p>}
 
-        <input
-          type="password"
-          maxLength="4"
-          placeholder="PIN"
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
-          className="p-2 w-full border rounded-md"
-        />
-        <input
-          type="password"
-          maxLength="4"
-          placeholder="Confirmar PIN"
-          value={confirmPin}
-          onChange={(e) => setConfirmPin(e.target.value)}
-          className="p-2 w-full border rounded-md"
-        />
+        {/* Campo PIN com visibilidade alternada */}
+        <div className="relative">
+          <input
+            type={showPin ? 'text' : 'password'}
+            maxLength="4"
+            placeholder="PIN"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            className="p-2 w-full border rounded-md"
+          />
+          <span
+            className="absolute right-3 top-2.5 text-gray-600 cursor-pointer"
+            onClick={() => setShowPin(!showPin)}
+          >
+            {showPin ? '🙈' : '👁️'}
+          </span>
+        </div>
+
+        {/* Campo Confirmar PIN com visibilidade alternada */}
+        <div className="relative">
+          <input
+            type={showConfirmPin ? 'text' : 'password'}
+            maxLength="4"
+            placeholder="Confirmar PIN"
+            value={confirmPin}
+            onChange={(e) => setConfirmPin(e.target.value)}
+            className="p-2 w-full border rounded-md"
+          />
+          <span
+            className="absolute right-3 top-2.5 text-gray-600 cursor-pointer"
+            onClick={() => setShowConfirmPin(!showConfirmPin)}
+          >
+            {showConfirmPin ? '🙈' : '👁️'}
+          </span>
+        </div>
 
         <button
           onClick={handleResetPin}

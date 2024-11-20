@@ -8,6 +8,7 @@ function InsertPINPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [showPin, setShowPin] = useState(false); // Estado para visibilidade do PIN
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -29,7 +30,7 @@ function InsertPINPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho
+          Authorization: `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho
         },
         body: JSON.stringify({ pin }), // Enviando o PIN no corpo da requisição
       });
@@ -76,14 +77,23 @@ function InsertPINPage() {
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         {successMessage && <p className="text-green-500">{successMessage}</p>}
 
-        <input
-          type="password"
-          maxLength="4"
-          placeholder="PIN"
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
-          className="p-2 w-full border rounded-md"
-        />
+        {/* Campo PIN com visibilidade alternada */}
+        <div className="relative">
+          <input
+            type={showPin ? 'text' : 'password'}
+            maxLength="4"
+            placeholder="PIN"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            className="p-2 w-full border rounded-md"
+          />
+          <span
+            className="absolute right-3 top-2.5 text-gray-600 cursor-pointer"
+            onClick={() => setShowPin(!showPin)}
+          >
+            {showPin ? '🙈' : '👁️'}
+          </span>
+        </div>
 
         <button
           onClick={handleOpenGate}
