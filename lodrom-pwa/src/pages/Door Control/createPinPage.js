@@ -36,7 +36,7 @@ function CreatePINPage() {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/controle_portao/set_pin/', {
+      const response = await fetch('http://localhost:8000/controle_portao/set_pin/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

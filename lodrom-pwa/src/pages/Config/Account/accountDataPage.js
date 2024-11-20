@@ -18,7 +18,7 @@ function AccountDataPage() {
   const fetchAccountData = async () => {
     const accessToken = localStorage.getItem('access');
     try {
-      const response = await fetch('http://127.0.0.1:8000/config/contas/account_data/', {
+      const response = await fetch('http://localhost:8000/config/contas/account_data/', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -49,7 +49,7 @@ function AccountDataPage() {
     };
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/config/contas/account_data/', {
+      const response = await fetch('http://localhost:8000/config/contas/account_data/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

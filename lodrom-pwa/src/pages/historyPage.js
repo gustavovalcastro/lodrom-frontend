@@ -17,7 +17,7 @@ function HistoryPage() {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/historico/', {
+      const response = await fetch('http://localhost:8000/historico/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho
@@ -80,7 +80,7 @@ function HistoryPage() {
   return (
     <div className="flex items-center justify-center bg-gray-100 font-sans min-h-[calc(100vh-4rem)] overflow-hidden">
       <div className="w-full max-w-md p-4">
-        
+
         <h1 className="text-2xl font-semibold text-gray-800">
           <button
             onClick={handleSidebarToggle}

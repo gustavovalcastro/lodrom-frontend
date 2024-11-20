@@ -30,7 +30,7 @@ function PasswordRestorePage() {
     };
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/config/contas/reset_password/', {
+      const response = await fetch('http://localhost:8000/config/contas/reset_password/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
