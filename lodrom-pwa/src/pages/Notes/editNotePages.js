@@ -29,13 +29,12 @@ function EditNotePage() {
 
       if (response.ok) {
         const data = await response.json();
-        // Filtra o recado pelo ID fornecido na URL
         const selectedNote = data.find((recado) => recado.message_id.toString() === id);
 
         if (selectedNote) {
           setMessage(selectedNote.message || '');
-          setStartTime(selectedNote.start_time || '');
-          setEndTime(selectedNote.end_time || '');
+          setStartTime(selectedNote.start_time || ''); // Converte null para string vazia
+          setEndTime(selectedNote.end_time || ''); // Converte null para string vazia
           setWeekDays(JSON.parse(selectedNote.days_week || '[]'));
         } else {
           alert('Recado não encontrado.');
@@ -53,9 +52,8 @@ function EditNotePage() {
 
   // Função para salvar as alterações
   const handleSave = async () => {
-    const accessToken = localStorage.getItem('access'); // Obtém o token do localStorage
+    const accessToken = localStorage.getItem('access');
     try {
-      // Construir o corpo da requisição dinamicamente
       const body = {
         message,
         days_week: weekDays, // Sempre enviar o array, mesmo que esteja vazio
@@ -69,19 +67,21 @@ function EditNotePage() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(body), // Enviar o corpo da requisição com os valores
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
         setSuccessMessage('Recado atualizado com sucesso!');
         setTimeout(() => {
           navigate('/recados-cadastrados');
-        }, 3000); // Redireciona após 3 segundos
+        }, 3000);
       } else {
         const errorData = await response.json();
         console.error('Erro ao salvar o recado:', response.status, errorData);
         alert(
-          `Erro ao atualizar o recado: ${errorData.start_time?.[0] || errorData.end_time?.[0] || 'Erro desconhecido'}`
+          `Erro ao atualizar o recado: ${
+            errorData.start_time?.[0] || errorData.end_time?.[0] || 'Erro desconhecido'
+          }`
         );
       }
     } catch (error) {
@@ -89,7 +89,6 @@ function EditNotePage() {
       alert('Erro ao salvar o recado.');
     }
   };
-
 
   const handleWeekDayToggle = (day) => {
     setWeekDays((prev) =>
@@ -99,7 +98,7 @@ function EditNotePage() {
 
   useEffect(() => {
     if (id) {
-      fetchNoteById(); // Busca o recado ao carregar a página
+      fetchNoteById();
     }
   }, [id]);
 
@@ -123,7 +122,6 @@ function EditNotePage() {
 
         <h1 className="text-2xl font-semibold text-gray-800">Editar Recado</h1>
 
-        {/* Mensagem de sucesso */}
         {successMessage && (
           <p className="text-green-500 text-center font-semibold">{successMessage}</p>
         )}
@@ -154,8 +152,9 @@ function EditNotePage() {
             <button
               key={day}
               onClick={() => handleWeekDayToggle(day)}
-              className={`p-2 rounded-lg ${weekDays.includes(day) ? 'bg-gray-300' : 'bg-gray-200'
-                }`}
+              className={`p-2 rounded-lg ${
+                weekDays.includes(day) ? 'bg-gray-300' : 'bg-gray-200'
+              }`}
             >
               {day}
             </button>

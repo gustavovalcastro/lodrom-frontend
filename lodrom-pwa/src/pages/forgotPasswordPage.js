@@ -10,6 +10,7 @@ function ForgotPasswordPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false); // Controle de visibilidade para senha
+  const [deviceCode, setDeviceCode] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Controle de visibilidade para confirmar senha
   const navigate = useNavigate();
 
@@ -34,9 +35,9 @@ function ForgotPasswordPage() {
         },
         body: JSON.stringify({
           email,
-          device_code: 'ALVORADA', // Valor fixo para o dispositivo
+          device_code: deviceCode,
           password,
-          password2: confirmPassword,
+          password2: confirmPassword
         }),
       });
 
@@ -45,9 +46,19 @@ function ForgotPasswordPage() {
         setTimeout(() => {
           navigate('/login'); // Redireciona para a página de login após sucesso
         }, 2000);
+      } else if (response.status === 400 || response.status === 404) {
+        const errorData = await response.json();
+        // If the error response contains a detailed list of errors, display them
+        const detailedErrors = Object.entries(errorData)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join("\n");
+        setErrorMessage(
+          detailedErrors ||
+            "Erro na requisição. Verifique os dados e tente novamente."
+        );
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Erro ao redefinir a senha. Tente novamente.');
+        setErrorMessage(errorData.message || "Erro ao enviar a solicitação.");
       }
     } catch (error) {
       console.error('Erro ao redefinir a senha:', error);
@@ -81,6 +92,15 @@ function ForgotPasswordPage() {
           placeholder="Digite seu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:border-gray-400"
+        />
+
+        {/* Device Code */}
+        <input
+          type="text"
+          placeholder="Digite o código do dispositivo"
+          value={deviceCode}
+          onChange={(e) => setDeviceCode(e.target.value)}
           className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:border-gray-400"
         />
 
