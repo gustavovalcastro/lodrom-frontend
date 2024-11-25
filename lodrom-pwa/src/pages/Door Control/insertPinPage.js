@@ -26,7 +26,7 @@ function InsertPINPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/controle_portao/open/', {
+      const response = await fetch('https://lodrom.cubcl.com/controle_portao/open/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

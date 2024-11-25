@@ -29,7 +29,7 @@ function RegisterPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8000/contas/create/', {
+      const response = await fetch('https://lodrom.cubcl.com/contas/create/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -38,7 +38,7 @@ function EditPINPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/config/controle_portao/reset_pin/', {
+      const response = await fetch('https://lodrom.cubcl.com/config/controle_portao/reset_pin/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ function PasswordRestorePage() {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/config/contas/reset_password/', {
+      const response = await fetch('https://lodrom.cubcl.com/config/contas/reset_password/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

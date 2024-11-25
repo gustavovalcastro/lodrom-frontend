@@ -38,7 +38,7 @@ function CreatePINPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/controle_portao/set_pin/', {
+      const response = await fetch('https://lodrom.cubcl.com/controle_portao/set_pin/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

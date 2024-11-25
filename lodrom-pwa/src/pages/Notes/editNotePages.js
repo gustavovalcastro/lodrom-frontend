@@ -20,7 +20,7 @@ function EditNotePage() {
   const fetchNoteById = async () => {
     const accessToken = localStorage.getItem('access');
     try {
-      const response = await fetch('http://localhost:8000/recados/list/', {
+      const response = await fetch('https://lodrom.cubcl.com/recados/list/', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -61,7 +61,7 @@ function EditNotePage() {
         end_time: endTime.trim() ? endTime : null, // Converte string vazia para null
       };
 
-      const response = await fetch(`http://localhost:8000/recados/edit/${id}`, {
+      const response = await fetch(`https://lodrom.cubcl.com/recados/edit/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

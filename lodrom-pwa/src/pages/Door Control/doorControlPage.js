@@ -21,7 +21,7 @@ function DoorControlPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/historico/', {
+      const response = await fetch('https://lodrom.cubcl.com/historico/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho
@@ -51,7 +51,7 @@ function DoorControlPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/controle_portao/check_pin/', {
+      const response = await fetch('https://lodrom.cubcl.com/controle_portao/check_pin/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`, // Incluindo o token de acesso no cabeçalho

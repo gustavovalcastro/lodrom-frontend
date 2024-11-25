@@ -43,7 +43,7 @@ function CreateNotePage() {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/recados/create/', {
+      const response = await fetch('https://lodrom.cubcl.com/recados/create/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

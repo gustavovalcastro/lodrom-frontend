@@ -17,7 +17,7 @@ function NotesPage() {
   const fetchRecados = async () => {
     const accessToken = localStorage.getItem('access');
     try {
-      const response = await fetch('http://localhost:8000/recados/list/', {
+      const response = await fetch('https://lodrom.cubcl.com/recados/list/', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -41,7 +41,7 @@ function NotesPage() {
     if (!recadoToDelete) return;
     const accessToken = localStorage.getItem('access');
     try {
-      const response = await fetch(`http://localhost:8000/recados/delete/${recadoToDelete}`, {
+      const response = await fetch(`https://lodrom.cubcl.com/recados/delete/${recadoToDelete}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
